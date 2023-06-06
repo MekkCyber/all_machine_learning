@@ -26,11 +26,6 @@ env.reset()
 state_size = env.observation_space.shape
 num_actions = env.action_space.n
 
-current_state = env.reset()
-
-action = 0
-next_state, reward, done,_ ,_ = env.step(action)
-
 q_network = tf.keras.Sequential([
     tf.keras.layers.Dense(units=64,input_shape=state_size,activation="relu"),
     tf.keras.layers.Dense(units=64,activation="relu"),
@@ -114,7 +109,6 @@ for i in range(num_episodes) :
     total_points_history.append(total_points)
     epsilon = get_new_eps(epsilon)
     print(f"episode {i} finished, with total points {total_points}")
-print(total_points_history)
 
 def plot_history(point_history):
 
@@ -122,9 +116,6 @@ def plot_history(point_history):
     upper_limit = len(point_history)
 
     window_size = (upper_limit * 10) // 100
-
-    plot_rolling_mean_only = False
-    plot_data_only = False
 
     points = point_history[lower_limit:upper_limit]
 
@@ -144,8 +135,6 @@ def plot_history(point_history):
     plt.grid()
     plt.xlabel("Episode", color=text_color, fontsize=30)
     plt.ylabel("Total Points", color=text_color, fontsize=30)
-    #yNumFmt = mticker.StrMethodFormatter("{x:,}")
-    #ax.yaxis.set_major_formatter(yNumFmt)
     ax.tick_params(axis="x", colors=text_color)
     ax.tick_params(axis="y", colors=text_color)
     plt.show()
