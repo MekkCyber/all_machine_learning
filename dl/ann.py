@@ -1,5 +1,7 @@
 import numpy as np
 import random
+import tensorflow as tf 
+import matplotlib.pyplot as plt
 def sigmoid(z) : 
     return 1/(1+np.exp(-z))
 
@@ -35,7 +37,10 @@ class Dense() :
         # we add the input to the activations list for later
         m = x.shape[0]
         for i in range(self.num_layers) :
-            l = Layer(self.shapes[i+1],self.shapes[i],activation="relu")
+            if i==self.num_layers-1 : 
+                l = Layer(self.shapes[i+1],self.shapes[i],activation="sigmoid")
+            else : 
+                l = Layer(self.shapes[i+1],self.shapes[i],activation="relu")
             self.layers.append(l)
         for j in range(epochs) : 
             input = x.copy()
@@ -51,7 +56,7 @@ class Dense() :
             if loss_f=="mse" : 
                 loss = (1/m)*np.sum(np.square(output-y))
             elif loss_f=="binary" : 
-                loss = -(1/m)*np.sum(y.T*np.log(output+epsilon)+(1-y).T*np.log(1-output-epsilon))
+                loss = -(1/m)*np.sum(y.T*np.log(output+epsilon)+(1-y).T*np.log(1-output+epsilon))
                 accuracy = np.sum((output>=0.5)==y.T) / y.shape[0]
             print(f"the loss for epoch {j} is {loss} and accuracy {accuracy*100}%")
             # backward propagation 
@@ -73,8 +78,24 @@ class Dense() :
             x = self.layers[i](x)
             x = x[1]
         return x
-dense = Dense(2,[2,3,1])
-x = np.array([[1,2,3,4,5],[2,45,65,8,120]])
-y = np.array([[1],[0],[0],[1],[0]])
-dense(x,y,epochs=1000,learning_rate=0.0005)
-print(dense.predict(np.array([[1,2,5],[2,4,44]])))
+#dense = Dense(2,[2,3,1])
+#x = np.array([[1,2,3,4,5],[2,45,65,8,120]])
+#y = np.array([[1],[0],[0],[1],[0]])
+#dense(x,y,epochs=1,learning_rate=0.0005)
+#print(dense.predict(np.array([[1,2,5],[2,4,44]])))
+
+
+(x_train, y_train), (x_test, y_test) = tf.keras.datasets.mnist.load_data()
+
+y = y_train[:1000]==0
+where_y_0 = np.nonzero(y)[0]
+indices = np.concatenate((where_y_0,np.arange(1000,1100)))
+x = x_train[indices,:,:].reshape(28*28,-1)
+y = [1]*len(where_y_0)
+y_1000 = y_train[1000:1100]==0
+y = np.concatenate((y,y_1000)).reshape(-1,1)
+
+dense = Dense(3,[x.shape[0],32,16,1])
+dense(x,y,epochs=2000,learning_rate=0.01)
+# 94% accuracy i guess it is working fine
+
