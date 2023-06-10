@@ -19,9 +19,23 @@ class Cell :
     def __call__(self,input_step,hidden_state) : 
         # input_step needs to be of dim (input_dim,batch_dim)
         # hidden_state needs to be of dim (cell_dim,batch_dim)
+        self.initialize()
         new_hidden_state = np.tanh(np.matmul(self.Wax,input_step)+np.matmul(self.Waa,hidden_state)+self.ba)
         output = softmax(np.matmul(self.Wya,new_hidden_state)+self.by,axis=0)
         return new_hidden_state,output
+
+class RNN : 
+    def _init_(self,input_dim,cell_dim,output_dim) : 
+        self.input_dim = input_dim
+        self.cell_dim = cell_dim
+        self.output_dim = output_dim
+
+    def forward(self,x) : 
+        # x the input is of shape (input_dim,batch_dim,sequence_length)
+        rnn_cell = Cell(self.input_dim,self.cell_dim,self.output_dim)
+        sequence_length = x.shape[3]
+        for i in range(sequence_length) : 
+            
 
 
 
