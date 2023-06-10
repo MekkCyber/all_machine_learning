@@ -32,10 +32,16 @@ class RNN :
 
     def forward(self,x) : 
         # x the input is of shape (input_dim,batch_dim,sequence_length)
+        # the output is of shape (output_dim,batch_dim,sequence_length)
+        sequence_length = x.shape[2]
+        batch_dim = x.shape[1]
+        output = np.zeros((self.output_dim,batch_dim,sequence_length))
         rnn_cell = Cell(self.input_dim,self.cell_dim,self.output_dim)
-        sequence_length = x.shape[3]
+        hidden_state = np.random.randn((self.cell_dim,batch_dim))
         for i in range(sequence_length) : 
-            
+            step = x[:,:,i]
+            hidden_state, output[:,:,i] = cell(step,hidden_state)
+
 
 
 
