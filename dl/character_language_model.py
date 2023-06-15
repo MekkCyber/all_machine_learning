@@ -28,5 +28,5 @@ for j in range(num_iterations) :
     y = [char_to_idx[ch] for ch in y]
     x = np.expand_dims(np.expand_dims(x,axis=0),axis=0)
     y_one_hot_encoded = np.zeros((len(y),27))
-    y_one_hot_encoded[]
-    rnn_cell(x,y)
+    y_one_hot_encoded[np.arange(len(y)),y] = 1
+    print(y_one_hot_encoded)
