@@ -37,7 +37,7 @@ class RNN :
         batch_dim = x.shape[1]
         output = np.zeros((self.output_dim,batch_dim,sequence_length))
         hidden_states = np.zeros((self.cell_dim,batch_dim,sequence_length+1))
-        # a referts to the hidden state
+        # a refers to the hidden state
         a_0 = np.random.randn(self.cell_dim,batch_dim)
         hidden_states[:,:,0] = a_0.copy()
         a_next = a_0
@@ -47,7 +47,7 @@ class RNN :
             hidden_states[:,:,i] = a_next
         return hidden_states, output
 
-    def backward(self,hidden_states,output,y,learning_rate=0.001) : 
+    def backward(self,x,hidden_states,output,y,learning_rate=0.001) : 
         # y is of shape (output_dim,batch_dim,sequence_length)
         sequence_length = x.shape[2]
         batch_dim = x.shape[1]
@@ -73,16 +73,17 @@ class RNN :
     def __call__(self,x,y,learning_rate=0.001,epochs=1) :
         for j in range(epochs) : 
             hidden_states, output = self.forward(x)
+            print(output.shape)
             loss = -np.sum(y*np.log(output))
             print(f"the loss in {j} epoch is : {loss}")
-            self.backward(hidden_states,output,y,learning_rate)
+            self.backward(x,hidden_states,output,y,learning_rate)
 
-rnn = RNN(4,5,6)
-x = np.array([[[0,1,0,0],[0,1,0,0],[0,1,0,0]],[[0,1,0,0],[0,1,0,0],[0,1,0,0]]])
-y = np.array([[[0,1,0,0,0,0],[0,1,0,0,0,0],[0,1,0,0,0,0]],[[0,1,0,0,0,0],[0,1,0,0,0,0],[0,1,0,0,0,0]]])
-x = x.transpose(2,0,1)
-y = y.transpose(2,0,1)
-rnn(x,y,epochs=1000,learning_rate=0.1)
+#rnn = RNN(4,5,6)
+#x = np.array([[[0,1,0,0],[0,1,0,0],[0,1,0,0]],[[0,1,0,0],[0,1,0,0],[0,1,0,0]]])
+#y = np.array([[[0,1,0,0,0,0],[0,1,0,0,0,0],[0,1,0,0,0,0]],[[0,1,0,0,0,0],[0,1,0,0,0,0],[0,1,0,0,0,0]]])
+#x = x.transpose(2,0,1)
+#y = y.transpose(2,0,1)
+#rnn(x,y,epochs=1000,learning_rate=0.1)
 
 
 
