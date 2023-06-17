@@ -73,7 +73,6 @@ class RNN :
     def __call__(self,x,y,learning_rate=0.001,epochs=1) :
         for j in range(epochs) : 
             hidden_states, output = self.forward(x)
-            print(output.shape)
             loss = -np.sum(y*np.log(output))
             print(f"the loss in {j} epoch is : {loss}")
             self.backward(x,hidden_states,output,y,learning_rate)
