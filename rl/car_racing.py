@@ -67,5 +67,4 @@ for i in range(num_episodes) :
         state_q = np.expand_dims(state,axis=0)
         actions = q_network(state)
         action = get_action(actions,epsilon)
-
         next_state, reward, 
