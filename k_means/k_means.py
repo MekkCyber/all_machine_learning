@@ -19,5 +19,5 @@ class KMeans :
         self.n_clusters = number_clusters
     
     def initialize(self,X) : 
-
+        min_, max_ = np.min(X_train, axis=0), np.max(X_train, axis=0)
         self.centroids = 
