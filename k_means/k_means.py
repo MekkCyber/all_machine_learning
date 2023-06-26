@@ -18,12 +18,30 @@ class KMeans :
     def __init__(self, number_clusters=5) : 
         self.n_clusters = number_clusters
     
-    def initialize(self,X) : 
+    def initialize_simple(self,X) : 
         min_, max_ = np.min(X_train, axis=0), np.max(X_train, axis=0)
         self.centroids = [np.random.uniform(min_,max_) for _ in range(self.n_clusters)]
 
+    def initialize_proba(self,X) :    
+        '''
+        1-If a centroid is initialized far from any groups, it is unlikely to move.
+        2-If centroids are initialized too close, they’re unlikely to diverge from one another.
+        that is why we use an other algorithm to intialize the centroids : 
+        a-Initialize the first centroid as a random selection of one of the data points.
+        b-Calculate the sum of the distances between each data point and all the centroids.
+        c-Select the next centroid randomly, with a probability proportional to the total distance to the centroids (this way the data point that is far away
+        from all the already existing centroids will have the highest probability)
+        d-Return to step 2. Repeat until all centroids have been initialized.
+        '''
+        first_centroid_idx = np.random.choice(range(len(X)))
+        self.centroids = [X[first_centroid_idx]]
+        for i in range(self.n_clusters-1) : 
+            dists = np.sum([euclidean(X,centroid) for centroid in self.centroids],axis=0)
+            dists /= np.sum(dists)
+            next_centroid_idx = np.random.choice(range(len(X)),p=dists)
+            self.centroids.append(X[next_centroid_idx])
     def __call__(self,X,max_num_iterations=100) : 
-        self.initialize(X)
+        self.initialize_proba(X)
         previous_centroids = None
         iteration = 0
         while np.not_equal(self.centroids,previous_centroids).any() and iteration < max_num_iterations : 
