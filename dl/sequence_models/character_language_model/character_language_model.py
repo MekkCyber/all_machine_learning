@@ -18,7 +18,7 @@ with open('dinos.txt') as f :
 # training loop
 num_iterations = 1
 
-rnn_cell = RNN(1,25,27)
+rnn_cell = RNN(1,10,27)
 
 for j in range(num_iterations) : 
     j = j%len(X)
@@ -31,6 +31,6 @@ for j in range(num_iterations) :
     y_one_hot_encoded[np.arange(len(y)),y] = 1
     y_one_hot_encoded = np.expand_dims(y_one_hot_encoded,axis=1)
     y_one_hot_encoded = y_one_hot_encoded.transpose(2,1,0)
-    rnn_cell(x,y_one_hot_encoded,epochs=10000,learning_rate=0.01)
+    rnn_cell(x,y_one_hot_encoded,epochs=1000,learning_rate=0.01)
 
     

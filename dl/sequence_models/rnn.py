@@ -10,9 +10,9 @@ class Cell :
         self.output_dim = output_dim
     
     def initialize(self) : 
-        self.Wax = np.random.randn(self.cell_dim,self.input_dim)
-        self.Waa = np.random.randn(self.cell_dim,self.cell_dim)
-        self.Wya = np.random.randn(self.output_dim,self.cell_dim)
+        self.Wax = np.random.randn(self.cell_dim,self.input_dim)*0.01
+        self.Waa = np.random.randn(self.cell_dim,self.cell_dim)*0.01
+        self.Wya = np.random.randn(self.output_dim,self.cell_dim)*0.01
         self.ba = np.zeros((self.cell_dim,1))
         self.by = np.zeros((self.output_dim,1))
 
