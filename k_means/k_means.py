@@ -3,12 +3,8 @@ import matplotlib.pyplot as plt
 from sklearn.datasets import make_blobs
 from sklearn.preprocessing import StandardScaler
 import numpy as np
-scaler = StandardScaler()
 
-#sns.scatterplot(x=X_train[:,0],y=X_train[:,1],hue=y_train,palette="deep")
-#plt.xlabel("x")
-#plt.ylabel("y")
-#plt.show()
+scaler = StandardScaler()
 
 def euclidean(x,y):
     return np.sqrt(np.sum((x - y)**2, axis=1))
@@ -40,7 +36,9 @@ class KMeans :
             dists /= np.sum(dists)
             next_centroid_idx = np.random.choice(range(len(X)),p=dists)
             self.centroids.append(X[next_centroid_idx])
+    
     def __call__(self,X,max_num_iterations=100) : 
+        #self.initialize_simple(X)
         self.initialize_proba(X)
         previous_centroids = None
         iteration = 0
@@ -66,13 +64,19 @@ class KMeans :
 centers = 5
 X_train, y_train = make_blobs(n_samples=100, centers=5, random_state=42)
 X_train = scaler.fit_transform(X_train)
+
+#sns.scatterplot(x=X_train[:,0],y=X_train[:,1],hue=y_train,palette="deep")
+#plt.xlabel("x")
+#plt.ylabel("y")
+#plt.show()
+
 k_means = KMeans()
 k_means(X_train)
-classification = k_means.evaluate(X_train)
+clustering = k_means.evaluate(X_train)
 sns.scatterplot(x=[X[0] for X in X_train],
                 y=[X[1] for X in X_train],
                 hue=y_train,
-                style=classification,
+                style=clustering,
                 palette="deep",
                 legend=None
                 )
