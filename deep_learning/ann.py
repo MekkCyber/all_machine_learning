@@ -88,6 +88,7 @@ class Dense() :
 
 (x_train, y_train), (x_test, y_test) = tf.keras.datasets.mnist.load_data()
 
+
 y = y_train[:1000]==0
 where_y_0 = np.nonzero(y)[0]
 indices = np.concatenate((where_y_0,np.arange(1000,1100)))
